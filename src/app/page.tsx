@@ -1,7 +1,9 @@
+import GameInstance from './lib/components/GameInstance.tsx';
+
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <h1 className="text-3xl font-bold">w∞rdle</h1>
+      <GameInstance />
     </main>
   );
 }
