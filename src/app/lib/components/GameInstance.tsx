@@ -1,25 +1,13 @@
 'use client';
 
-import { useState } from 'react';
-import { GameState } from '../definitions.ts';
+import { GameInstanceProps } from '../definitions.ts';
 import LetterBox from './LetterBox.tsx';
 
-export default function GameInstance() {
-  const initialGameState: GameState = {
-    letterGrid: [
-      ['a', 'p', 'p', 'l', 'e'],
-      ['', '', '', '', ''],
-      ['', '', '', '', ''],
-      ['', '', '', '', ''],
-      ['', '', '', '', ''],
-      ['', '', '', '', ''],
-      ['', '', '', '', ''],
-    ],
-  };
+// eslint-disable-next-line no-unused-vars
+export default function GameInstance({ gameState, key, id }: GameInstanceProps) {
+  const currentGame = gameState.find((state) => state.id === id) || gameState[0];
 
-  const [gameState, setGameState] = useState<GameState>(initialGameState);
-
-  const letterGridDisplay = gameState.letterGrid.map((letterRow) => (
+  const letterGridDisplay = currentGame.letterGrid.map((letterRow) => (
     <div className="flex gap-1">
       {
         letterRow.map((letter) => (
