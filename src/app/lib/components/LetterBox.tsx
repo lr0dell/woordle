@@ -1,8 +1,8 @@
 export default function LetterBox(
-  { value }: {value : string},
+  { value, color }: {value : string, color: string},
 ) {
   return (
-    <div className="flex justify-center items-center bg-slate-50 text-2xl font-bold uppercase size-12 border-black border-2">
+    <div className={`${color} flex justify-center items-center text-2xl text-slate-50 font-bold uppercase size-12 border-black border-2`}>
       {value}
     </div>
   );

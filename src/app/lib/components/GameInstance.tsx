@@ -11,7 +11,7 @@ export default function GameInstance({ gameState, key, id }: GameInstanceProps) 
     <div className="flex gap-1">
       {
         letterRow.map((letter) => (
-          <LetterBox value={letter} />
+          <LetterBox value={letter.value} color={(letter.color as string)} />
         ))
       }
     </div>
