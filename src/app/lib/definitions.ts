@@ -16,6 +16,8 @@ export type GameState = {
   id: string;
   wordToGuess: string;
   letterGrid: Letter[][];
+  unusedLetters: string[];
+  isWon: boolean;
 }
 
 // describes the props passed to a GameInstance
@@ -24,3 +26,18 @@ export type GameInstanceProps = {
   key: string;
   id: string;
 }
+
+// describes the props passed to a GameOverModal
+export type GameOverModalProps = {
+  modalIsOpen: boolean,
+  score: number,
+}
+
+export const defaultAlphabet: string[] = [
+  'a', 'b', 'c', 'd', 'e',
+  'f', 'g', 'h', 'i', 'j',
+  'k', 'l', 'm', 'n', 'o',
+  'p', 'q', 'r', 's', 't',
+  'u', 'v', 'w', 'x', 'y',
+  'z',
+];
