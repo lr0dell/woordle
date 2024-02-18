@@ -217,7 +217,7 @@ export default function Game() {
       </div>
       <form>
         <input
-          className="bg-slate-50 text-2xl font-bold uppercase rounded-2xl p-2 max-w-32 text-center"
+          className="bg-slate-50 text-2xl font-bold uppercase rounded-2xl p-2 max-w-32 text-center text-black"
           type="text"
           id="word-guess"
           name="wordGuess"
@@ -228,7 +228,7 @@ export default function Game() {
           maxLength={WORD_LENGTH}
         />
         <button
-          className="text-2xl size-12 bg-slate-100 rounded-2xl ml-2"
+          className="text-2xl size-12 bg-slate-100 rounded-2xl ml-2 text-black"
           type="submit"
           aria-label="Submit"
           onClick={submitWord}
