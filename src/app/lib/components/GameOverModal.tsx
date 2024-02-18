@@ -3,7 +3,7 @@
 import Modal from 'react-modal';
 import { GameOverModalProps } from '../definitions.ts';
 
-export default function GameOverModal({ modalIsOpen, score }: GameOverModalProps) {
+export default function GameOverModal({ modalIsOpen, score, onClick }: GameOverModalProps) {
   return (
     <Modal
       isOpen={modalIsOpen}
@@ -15,6 +15,14 @@ export default function GameOverModal({ modalIsOpen, score }: GameOverModalProps
         <br />
         {`Score: ${score}`}
       </p>
+      <button
+        className="bg-green-500 border-black border-2 rounded-lg px-4 py-2 mt-4 text-5xl font-bold text-white"
+        aria-label="retry"
+        type="button"
+        onClick={onClick}
+      >
+        ↻
+      </button>
     </Modal>
   );
 }

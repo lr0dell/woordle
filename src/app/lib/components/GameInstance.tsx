@@ -4,8 +4,8 @@ import { nanoid } from 'nanoid';
 import { GameInstanceProps } from '../definitions.ts';
 import LetterBox from './LetterBox.tsx';
 
-export default function GameInstance({ gameState, id }: GameInstanceProps) {
-  const currentGame = gameState.find((state) => state.id === id) || gameState[0];
+export default function GameInstance({ gameStates, id }: GameInstanceProps) {
+  const currentGame = gameStates.find((state) => state.id === id) || gameStates[0];
 
   const letterGridDisplay = currentGame.letterGrid.map((letterRow) => (
     <div className="flex gap-1" key={nanoid()}>

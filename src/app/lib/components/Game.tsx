@@ -1,10 +1,12 @@
 'use client';
 
 import { nanoid } from 'nanoid';
-import { SyntheticEvent, useEffect, useState } from 'react';
+import {
+  SyntheticEvent, useCallback, useEffect, useState,
+} from 'react';
 import wordBank from '../sgb-words.ts';
 import {
-  GameState, defaultLetter, Letter, defaultAlphabet,
+  GameState, defaultLetter, Letter, defaultAlphabet, NUM_GUESSES, WORD_LENGTH, NEW_GAME_RATE,
 } from '../definitions.ts';
 import GameInstance from './GameInstance.tsx';
 import GameOverModal from './GameOverModal.tsx';
@@ -18,14 +20,14 @@ export default function Game() {
     {
       id: nanoid(),
       wordToGuess: 'shirt',
-      letterGrid: new Array(9).fill(Array(5).fill({ ...defaultLetter })),
+      letterGrid: new Array(NUM_GUESSES).fill(Array(WORD_LENGTH).fill({ ...defaultLetter })),
       unusedLetters: [...defaultAlphabet],
       isWon: false,
     },
   ];
 
   const [gameOverModalOpen, setGameOverModalOpen] = useState<boolean>(false);
-  const [gameState, setGameState] = useState<GameState[]>(initialGameState);
+  const [gameStates, setGameStates] = useState<GameState[]>([...initialGameState]);
   const [inputText, setInputText] = useState<string>('');
   const [inputErrors, setInputErrors] = useState<string[]>([]);
   const [gameTurnCounter, setGameTurnCounter] = useState<number>(0);
@@ -36,8 +38,8 @@ export default function Game() {
   */
   useEffect(
     () => {
-      setGameState((oldGameStateArray) => (
-        oldGameStateArray.map((oldGameState) => (
+      setGameStates((oldGameStates) => (
+        oldGameStates.map((oldGameState) => (
           { ...oldGameState, wordToGuess: generateWord() }
         ))
       ));
@@ -48,13 +50,15 @@ export default function Game() {
   // add new game instance every 3rd turn
   useEffect(
     () => {
-      if (gameTurnCounter % 3 === 0 && gameTurnCounter !== 0) {
-        setGameState((oldGameStateArray) => (
-          oldGameStateArray.concat([
+      if (gameTurnCounter % NEW_GAME_RATE === 0 && gameTurnCounter !== 0) {
+        setGameStates((oldGameStates) => (
+          oldGameStates.concat([
             {
               id: nanoid(),
               wordToGuess: generateWord(),
-              letterGrid: new Array(9).fill(Array(5).fill({ ...defaultLetter })),
+              letterGrid: new Array(NUM_GUESSES)
+                .fill(Array(WORD_LENGTH)
+                  .fill({ ...defaultLetter })),
               unusedLetters: [...defaultAlphabet],
               isWon: false,
             },
@@ -67,16 +71,28 @@ export default function Game() {
 
   useEffect(
     () => {
+      if (gameStates.length === 0) { // in case user solves wordles too fast
+        setGameStates([
+          {
+            id: nanoid(),
+            wordToGuess: generateWord(),
+            letterGrid: new Array(NUM_GUESSES).fill(Array(WORD_LENGTH).fill({ ...defaultLetter })),
+            unusedLetters: [...defaultAlphabet],
+            isWon: false,
+          },
+        ]);
+      }
+
       // if a board is filled and is not won, game over
-      if (gameState.some((state) => (state.letterGrid[8][0].value !== '' && !state.isWon))) {
+      if (gameStates.some((state) => (state.letterGrid[NUM_GUESSES - 1][0].value !== '' && !state.isWon))) {
         setGameOverModalOpen(true);
       }
     },
-    [gameState],
+    [gameStates],
   );
 
-  const gameInstancesDisplay = gameState.map((gameInstanceState) => (
-    <GameInstance gameState={gameState} key={gameInstanceState.id} id={gameInstanceState.id} />
+  const gameInstancesDisplay = gameStates.map((state) => (
+    <GameInstance gameStates={gameStates} key={state.id} id={state.id} />
   ));
 
   const errorsDisplay = inputErrors.map((error) => (
@@ -120,7 +136,7 @@ export default function Game() {
     e.preventDefault();
 
     // check for input errors
-    if (inputText.length < 5) {
+    if (inputText.length < WORD_LENGTH) {
       setInputErrors((oldErrors) => (
         oldErrors.indexOf('Not enough letters') === -1 ? [...oldErrors, 'Not enough letters'] : [...oldErrors]
       ));
@@ -139,15 +155,15 @@ export default function Game() {
     ));
 
     // prune finished games from old state array
-    setGameState((oldStateArray) => (
-      oldStateArray.filter((oldState) => (
+    setGameStates((oldStates) => (
+      oldStates.filter((oldState) => (
         !oldState.isWon
       ))
     ));
 
     // add new guessed word to old state array and check to see if game instance has been won
-    setGameState((oldStateArray) => (
-      oldStateArray.map((oldState) => (
+    setGameStates((oldStates) => (
+      oldStates.map((oldState) => (
         {
           ...oldState,
           letterGrid: JSON.parse(JSON.stringify(
@@ -171,11 +187,30 @@ export default function Game() {
     setGameTurnCounter((oldTurn) => oldTurn + 1);
   }
 
+  // allow button in GameOverModal to reset game
+  const newGame = useCallback(
+    () => {
+      setGameStates([
+        {
+          id: nanoid(),
+          wordToGuess: generateWord(),
+          letterGrid: new Array(NUM_GUESSES).fill(Array(WORD_LENGTH).fill({ ...defaultLetter })),
+          unusedLetters: [...defaultAlphabet],
+          isWon: false,
+        },
+      ]);
+      setGameTurnCounter(0);
+      setGameOverModalOpen(false);
+    },
+    [],
+  );
+
   return (
     <div className="flex flex-col gap-4 justify-center items-center">
       <GameOverModal
         modalIsOpen={gameOverModalOpen}
         score={gameTurnCounter}
+        onClick={newGame}
       />
       <div className="flex gap-4">
         {gameInstancesDisplay}
@@ -190,7 +225,7 @@ export default function Game() {
             (e.target.value.match(/^[a-zA-Z]+$/) || e.target.value === '') && setInputText(e.target.value.toLowerCase())
           )}
           value={inputText}
-          maxLength={5}
+          maxLength={WORD_LENGTH}
         />
         <button
           className="text-2xl size-12 bg-slate-100 rounded-2xl ml-2"

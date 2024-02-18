@@ -1,3 +1,7 @@
+export const WORD_LENGTH: number = 5;
+export const NUM_GUESSES: number = 7;
+export const NEW_GAME_RATE: number = 3;
+
 export type LetterColor = 'bg-slate-50' | 'bg-slate-500' | 'bg-yellow-500' | 'bg-green-500'
 
 // describes the value and status of a particular letter on a gameboard
@@ -22,7 +26,7 @@ export type GameState = {
 
 // describes the props passed to a GameInstance
 export type GameInstanceProps = {
-  gameState: GameState[];
+  gameStates: GameState[];
   key: string;
   id: string;
 }
@@ -31,6 +35,7 @@ export type GameInstanceProps = {
 export type GameOverModalProps = {
   modalIsOpen: boolean,
   score: number,
+  onClick: () => void,
 }
 
 export const defaultAlphabet: string[] = [
