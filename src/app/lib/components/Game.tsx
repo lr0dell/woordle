@@ -6,7 +6,7 @@ import {
 } from 'react';
 import wordBank from '../sgb-words.ts';
 import {
-  GameState, defaultLetter, Letter, defaultAlphabet, NUM_GUESSES, WORD_LENGTH, NEW_GAME_RATE,
+  GameState, defaultLetter, Letter, defaultAlphabet, constants,
 } from '../definitions.ts';
 import GameInstance from './GameInstance.tsx';
 import GameOverModal from './GameOverModal.tsx';
@@ -20,7 +20,9 @@ export default function Game() {
     {
       id: nanoid(),
       wordToGuess: 'shirt',
-      letterGrid: new Array(NUM_GUESSES).fill(Array(WORD_LENGTH).fill({ ...defaultLetter })),
+      letterGrid: new Array(constants.NUM_GUESSES)
+        .fill(Array(constants.WORD_LENGTH)
+          .fill({ ...defaultLetter })),
       unusedLetters: [...defaultAlphabet],
       isWon: false,
     },
@@ -50,14 +52,14 @@ export default function Game() {
   // add new game instance every 3rd turn
   useEffect(
     () => {
-      if (gameTurnCounter % NEW_GAME_RATE === 0 && gameTurnCounter !== 0) {
+      if (gameTurnCounter % constants.NEW_GAME_RATE === 0 && gameTurnCounter !== 0) {
         setGameStates((oldGameStates) => (
           oldGameStates.concat([
             {
               id: nanoid(),
               wordToGuess: generateWord(),
-              letterGrid: new Array(NUM_GUESSES)
-                .fill(Array(WORD_LENGTH)
+              letterGrid: new Array(constants.NUM_GUESSES)
+                .fill(Array(constants.WORD_LENGTH)
                   .fill({ ...defaultLetter })),
               unusedLetters: [...defaultAlphabet],
               isWon: false,
@@ -71,12 +73,15 @@ export default function Game() {
 
   useEffect(
     () => {
-      if (gameStates.length === 0) { // in case user solves wordles too fast
+      // in case user solves wordles too fast
+      if (!gameStates.some((state) => (!state.isWon))) {
         setGameStates([
           {
             id: nanoid(),
             wordToGuess: generateWord(),
-            letterGrid: new Array(NUM_GUESSES).fill(Array(WORD_LENGTH).fill({ ...defaultLetter })),
+            letterGrid: new Array(constants.NUM_GUESSES)
+              .fill(Array(constants.WORD_LENGTH)
+                .fill({ ...defaultLetter })),
             unusedLetters: [...defaultAlphabet],
             isWon: false,
           },
@@ -84,7 +89,7 @@ export default function Game() {
       }
 
       // if a board is filled and is not won, game over
-      if (gameStates.some((state) => (state.letterGrid[NUM_GUESSES - 1][0].value !== '' && !state.isWon))) {
+      if (gameStates.some((state) => (state.letterGrid[constants.NUM_GUESSES - 1][0].value !== '' && !state.isWon))) {
         setGameOverModalOpen(true);
       }
     },
@@ -136,7 +141,7 @@ export default function Game() {
     e.preventDefault();
 
     // check for input errors
-    if (inputText.length < WORD_LENGTH) {
+    if (inputText.length < constants.WORD_LENGTH) {
       setInputErrors((oldErrors) => (
         oldErrors.indexOf('Not enough letters') === -1 ? [...oldErrors, 'Not enough letters'] : [...oldErrors]
       ));
@@ -194,7 +199,9 @@ export default function Game() {
         {
           id: nanoid(),
           wordToGuess: generateWord(),
-          letterGrid: new Array(NUM_GUESSES).fill(Array(WORD_LENGTH).fill({ ...defaultLetter })),
+          letterGrid: new Array(constants.NUM_GUESSES)
+            .fill(Array(constants.WORD_LENGTH)
+              .fill({ ...defaultLetter })),
           unusedLetters: [...defaultAlphabet],
           isWon: false,
         },
@@ -225,7 +232,7 @@ export default function Game() {
             (e.target.value.match(/^[a-zA-Z]+$/) || e.target.value === '') && setInputText(e.target.value.toLowerCase())
           )}
           value={inputText}
-          maxLength={WORD_LENGTH}
+          maxLength={constants.WORD_LENGTH}
         />
         <button
           className="text-2xl size-12 bg-slate-100 rounded-2xl ml-2 text-black"

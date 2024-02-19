@@ -1,3 +1,8 @@
+export const constants = Object.freeze({
+  WORD_LENGTH: 5,
+  NUM_GUESSES: 7,
+  NEW_GAME_RATE: 3,
+});
 export const WORD_LENGTH: number = 5;
 export const NUM_GUESSES: number = 7;
 export const NEW_GAME_RATE: number = 3;
