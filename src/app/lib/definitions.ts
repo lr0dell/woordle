@@ -1,11 +1,20 @@
+import { Dispatch, SetStateAction } from 'react';
+
+// "freeze" is used to set all fields of this object as read-only
 export const constants = Object.freeze({
   WORD_LENGTH: 5,
   NUM_GUESSES: 7,
   NEW_GAME_RATE: 3,
 });
-export const WORD_LENGTH: number = 5;
-export const NUM_GUESSES: number = 7;
-export const NEW_GAME_RATE: number = 3;
+
+export const defaultAlphabet: string[] = [
+  'a', 'b', 'c', 'd', 'e',
+  'f', 'g', 'h', 'i', 'j',
+  'k', 'l', 'm', 'n', 'o',
+  'p', 'q', 'r', 's', 't',
+  'u', 'v', 'w', 'x', 'y',
+  'z',
+];
 
 export type LetterColor = 'bg-slate-50' | 'bg-slate-500' | 'bg-yellow-500' | 'bg-green-500'
 
@@ -40,14 +49,11 @@ export type GameInstanceProps = {
 export type GameOverModalProps = {
   modalIsOpen: boolean,
   score: number,
-  onClick: () => void,
+  btnOnClick: () => void,
 }
 
-export const defaultAlphabet: string[] = [
-  'a', 'b', 'c', 'd', 'e',
-  'f', 'g', 'h', 'i', 'j',
-  'k', 'l', 'm', 'n', 'o',
-  'p', 'q', 'r', 's', 't',
-  'u', 'v', 'w', 'x', 'y',
-  'z',
-];
+// describes the props passed to an InfoModal
+export type InfoModalProps = {
+  modalIsOpen: boolean,
+  setModalIsOpen: Dispatch<SetStateAction<boolean>>,
+}

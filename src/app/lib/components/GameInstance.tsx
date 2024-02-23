@@ -1,6 +1,7 @@
 'use client';
 
 import { nanoid } from 'nanoid';
+
 import { GameInstanceProps } from '../definitions.ts';
 import LetterBox from './LetterBox.tsx';
 
