@@ -14,7 +14,7 @@ export default function InfoModal({ modalIsOpen, setModalIsOpen }: InfoModalProp
       </h1>
       <ul className="text-black list-disc w-fit mx-auto text-left mb-8">
         <li>{`You have ${constants.NUM_GUESSES} tries to guess the hidden ${constants.WORD_LENGTH}-letter word.`}</li>
-        <li>{`Every ${constants.NEW_GAME_RATE} guesses, a new hidden word appears.`}</li>
+        <li>{`Every ${constants.NEW_GAME_RATE} guesses, a fresh grid with a new hidden word appears.`}</li>
         <li>Every new guess applies to every hidden word on screen.</li>
       </ul>
       <ul className="text-black list-disc w-fit mx-auto text-left">

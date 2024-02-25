@@ -232,20 +232,21 @@ export default function Game() {
         modalIsOpen={infoModalOpen}
         setModalIsOpen={setInfoModalOpen}
       />
-      <div className="flex gap-4">
-        {gameInstancesDisplay}
-      </div>
-      <form>
+      <div className="flex gap-4 relative">
         <button
-          className="text-2xl text-bold size-12 bg-slate-100 rounded-2xl mr-14 font-black"
+          className="text-2xl size-12 bg-slate-100 rounded-2xl font-black absolute -top-16 -right-0 rounded-full"
           type="button"
           aria-label="help"
           onClick={() => setInfoModalOpen(true)}
         >
           ?
         </button>
+        {gameInstancesDisplay}
+      </div>
+      <form>
         <input
-          className="bg-slate-50 text-2xl font-bold uppercase rounded-2xl p-2 max-w-32 text-center text-black"
+          className="bg-slate-50 text-2xl font-bold uppercase rounded-2xl p-2 max-w-32 text-center text-black
+          placeholder:normal-case placeholder:text-base placeholder:font-normal"
           type="text"
           id="word-guess"
           name="wordGuess"
@@ -254,14 +255,15 @@ export default function Game() {
           )}
           value={inputText}
           maxLength={constants.WORD_LENGTH}
+          placeholder="Enter guess..."
         />
         <button
-          className="text-2xl size-12 bg-slate-100 rounded-2xl ml-2 text-black"
+          className="font-black text-2xl size-12 bg-slate-100 rounded-2xl ml-2 text-black"
           type="submit"
           aria-label="Submit"
           onClick={submitWord}
         >
-          →
+          ↵
         </button>
       </form>
       {errorsDisplay}
